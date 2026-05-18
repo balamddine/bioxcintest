@@ -3,13 +3,15 @@ export interface Product {
   name: string;
   category: 'Hair Care' | 'Skin Care' | 'Supplement';
   subCategory?: string;
+  summary?: string;
   description: string;
   ingredients: string[];
   howToUse: string;
   size: string;
-  price: number;
   image: string;
+  productUrl?: string;
   isPopular?: boolean;
+  homeFeatured?: boolean;
 }
 
 export interface CartItem extends Product {

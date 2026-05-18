@@ -60,9 +60,11 @@ export const ProductModal = ({ product, onClose, onAddToCart }: ProductModalProp
             </div>
 
             <h2 className="font-serif text-4xl lg:text-6xl font-light italic leading-tight mb-10">{product.name}</h2>
+            {product.summary && (
+              <p className="text-sm text-neutral-500 leading-relaxed font-light mb-10">{product.summary}</p>
+            )}
             
             <div className="flex items-baseline gap-4 mb-10 pb-10 border-b border-editor-border">
-              <span className="text-3xl font-light tracking-tighter">${product.price.toFixed(2)}</span>
               <span className="text-neutral-400 text-xs italic">{product.size}</span>
             </div>
 
@@ -99,7 +101,7 @@ export const ProductModal = ({ product, onClose, onAddToCart }: ProductModalProp
                 }}
                 className="w-full bg-editor-text text-white py-5 text-[10px] uppercase tracking-[0.3em] font-bold hover:opacity-90 transition-all"
               >
-                Add to Archive
+                Add to Cart
               </button>
             </div>
           </div>

@@ -1,20 +1,38 @@
-import React, { useState } from 'react';
-import { ShoppingCart, Search, Menu, X, Leaf } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Search, Menu, X, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { Link, useNavigate } from 'react-router-dom';
 
-interface NavbarProps {
-  cartCount: number;
-  onOpenCart: () => void;
-  onSearch: (term: string) => void;
-}
+const categories = ['Hair Care', 'Skin Care', 'Supplement'];
 
-export const Navbar = ({ cartCount, onOpenCart, onSearch }: NavbarProps) => {
+export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    onSearch(searchTerm);
+    if (searchTerm.trim()) {
+      navigate(`/shop?search=${encodeURIComponent(searchTerm.trim())}`);
+      setSearchTerm('');
+    }
+  };
+
+  const handleCategoryClick = (cat: string) => {
+    setIsDropdownOpen(false);
+    navigate(`/shop?category=${encodeURIComponent(cat)}`);
   };
 
   return (
@@ -29,25 +47,53 @@ export const Navbar = ({ cartCount, onOpenCart, onSearch }: NavbarProps) => {
         </button>
 
         {/* Logo */}
-        <div className="flex items-center gap-4 cursor-pointer">
-          <div className="text-[10px] tracking-[0.3em] font-bold uppercase opacity-60 flex items-center gap-2">
-            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-            Biota / Studio
-          </div>
+        <Link to="/" className="flex items-center gap-4">
+        
           <span className="font-serif text-3xl font-light tracking-tighter text-editor-text">BIOXCIN</span>
-        </div>
+        </Link>
 
         {/* Desktop Nav */}
         <div className="hidden lg:flex items-center gap-12">
-          <a href="#" className="text-[10px] tracking-widest uppercase hover:opacity-50 transition-opacity">Shop</a>
-          <a href="#" className="text-[10px] tracking-widest uppercase hover:opacity-50 transition-opacity">Categories</a>
-          <a href="#" className="text-[10px] tracking-widest uppercase hover:opacity-50 transition-opacity">Archive</a>
-          <a href="#" className="text-[10px] tracking-widest uppercase hover:opacity-50 transition-opacity">About Lab</a>
+          <Link to="/shop" className="text-[10px] tracking-widest uppercase hover:opacity-50 transition-opacity">Shop</Link>
+          
+          <div className="relative" ref={dropdownRef}>
+            <button 
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className="text-[10px] tracking-widest uppercase hover:opacity-50 transition-opacity flex items-center gap-1"
+            >
+              Categories <ChevronDown size={12} className={`transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
+            </button>
+            
+            <AnimatePresence>
+              {isDropdownOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.15 }}
+                  className="absolute top-full left-0 mt-4 bg-white border border-editor-border shadow-lg min-w-[180px] py-2 z-50"
+                >
+                  {categories.map(cat => (
+                    <button
+                      key={cat}
+                      onClick={() => handleCategoryClick(cat)}
+                      className="block w-full text-left px-6 py-3 text-[10px] tracking-widest uppercase hover:bg-editor-bg transition-colors"
+                    >
+                      {cat}
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+          
+          <Link to="/about" className="text-[10px] tracking-widest uppercase hover:opacity-50 transition-opacity">About Us</Link>
+          <a href="#contact" className="text-[10px] tracking-widest uppercase hover:opacity-50 transition-opacity">Contact</a>
         </div>
 
         {/* Actions */}
         <div className="flex items-center gap-8">
-          <form onSubmit={handleSubmit} className="hidden md:flex items-center border-b border-editor-text/20 py-1">
+          <form onSubmit={handleSearch} className="hidden md:flex items-center border-b border-editor-text/20 py-1">
             <Search size={14} className="text-editor-text/40" />
             <input 
               type="text" 
@@ -57,16 +103,6 @@ export const Navbar = ({ cartCount, onOpenCart, onSearch }: NavbarProps) => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </form>
-          
-          <button 
-            onClick={onOpenCart}
-            className="flex items-center gap-2 group"
-          >
-            <span className="text-[10px] tracking-widest uppercase group-hover:opacity-50">Archive</span>
-            <div className="w-5 h-5 bg-editor-text rounded-full flex items-center justify-center text-[10px] text-white">
-              {cartCount}
-            </div>
-          </button>
         </div>
       </div>
 
@@ -80,19 +116,32 @@ export const Navbar = ({ cartCount, onOpenCart, onSearch }: NavbarProps) => {
             className="lg:hidden bg-white border-b border-neutral-200 overflow-hidden"
           >
             <div className="px-4 py-6 flex flex-col gap-4">
-              <a href="#" className="text-lg font-medium text-neutral-800">Hair Care</a>
-              <a href="#" className="text-lg font-medium text-neutral-800">Skin Care</a>
-              <a href="#" className="text-lg font-medium text-neutral-800">Supplements</a>
-              <a href="#" className="text-lg font-medium text-neutral-800">About Lab</a>
+              <Link to="/shop" onClick={() => setIsMenuOpen(false)} className="text-lg font-medium text-neutral-800">Shop</Link>
+              <div className="h-px bg-neutral-100" />
+              <span className="text-xs uppercase tracking-widest opacity-40">Categories</span>
+              {categories.map(cat => (
+                <button
+                  key={cat}
+                  onClick={() => { handleCategoryClick(cat); setIsMenuOpen(false); }}
+                  className="text-lg font-medium text-neutral-800 text-left"
+                >
+                  {cat}
+                </button>
+              ))}
               <div className="h-px bg-neutral-100 my-2" />
-              <div className="flex items-center bg-neutral-100 rounded-lg px-4 py-3">
+              <Link to="/about" onClick={() => setIsMenuOpen(false)} className="text-lg font-medium text-neutral-800">About Us</Link>
+              <a href="#contact" onClick={() => setIsMenuOpen(false)} className="text-lg font-medium text-neutral-800">Contact</a>
+              <div className="h-px bg-neutral-100 my-2" />
+              <form onSubmit={handleSearch} className="flex items-center bg-neutral-100 rounded-lg px-4 py-3">
                 <Search size={18} className="text-neutral-400" />
                 <input 
                   type="text" 
                   placeholder="Search products..."
                   className="bg-transparent border-none focus:outline-none ml-2 text-sm w-full"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                 />
-              </div>
+              </form>
             </div>
           </motion.div>
         )}
