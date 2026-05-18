@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { ArrowRight, ShieldCheck, Headphones, Truck, Package, Send } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -12,9 +12,17 @@ interface HomePageProps {
 
 export const HomePage = ({ products }: HomePageProps) => {
   const featuredProducts = products.filter(p => p.isPopular);
-  const homeFeaturedProducts = products.filter(p => p.homeFeatured);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
+
+  useEffect(() => {
+    if (window.location.hash === '#contact') {
+      const timer = setTimeout(() => {
+        document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,7 +33,7 @@ export const HomePage = ({ products }: HomePageProps) => {
 
   return (
     <div className="flex-1">
-      <Hero products={homeFeaturedProducts} />
+      <Hero products={featuredProducts} />
 
       {/* Brand Values */}
       <section className="bg-editor-bg py-16 border-b border-editor-border">

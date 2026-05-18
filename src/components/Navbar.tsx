@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Search, Menu, X, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 const categories = ['Hair Care', 'Skin Care', 'Supplement'];
 
@@ -11,6 +11,7 @@ export const Navbar = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -33,6 +34,16 @@ export const Navbar = () => {
   const handleCategoryClick = (cat: string) => {
     setIsDropdownOpen(false);
     navigate(`/shop?category=${encodeURIComponent(cat)}`);
+  };
+
+  const handleContactClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (location.pathname === '/') {
+      document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      navigate('/#contact');
+    }
+    setIsMenuOpen(false);
   };
 
   return (
@@ -88,7 +99,7 @@ export const Navbar = () => {
           </div>
           
           <Link to="/about" className="text-[10px] tracking-widest uppercase hover:opacity-50 transition-opacity">About Us</Link>
-          <a href="#contact" className="text-[10px] tracking-widest uppercase hover:opacity-50 transition-opacity">Contact</a>
+          <button onClick={handleContactClick} className="text-[10px] tracking-widest uppercase hover:opacity-50 transition-opacity">Contact</button>
         </div>
 
         {/* Actions */}
@@ -130,7 +141,7 @@ export const Navbar = () => {
               ))}
               <div className="h-px bg-neutral-100 my-2" />
               <Link to="/about" onClick={() => setIsMenuOpen(false)} className="text-lg font-medium text-neutral-800">About Us</Link>
-              <a href="#contact" onClick={() => setIsMenuOpen(false)} className="text-lg font-medium text-neutral-800">Contact</a>
+              <button onClick={handleContactClick} className="text-lg font-medium text-neutral-800 text-left">Contact</button>
               <div className="h-px bg-neutral-100 my-2" />
               <form onSubmit={handleSearch} className="flex items-center bg-neutral-100 rounded-lg px-4 py-3">
                 <Search size={18} className="text-neutral-400" />
