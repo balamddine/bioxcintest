@@ -1,0 +1,8 @@
+{
+  "name": "Bioxcin Herbal Solutions",
+  "description": "Premium herbal hair and skin care e-commerce platform featuring scientific botanical solutions.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
