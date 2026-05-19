@@ -29,7 +29,7 @@ export const ProductPage = ({ products }: ProductPageProps) => {
     );
   }
 
-  const relatedProducts = products.filter(p => p.category === product.category && p.id !== product.id);
+  const relatedProducts = products.filter(p => p.category === product.category && p.id !== product.id).slice(0, 6);
 
   return (
     <div className="flex-1">
@@ -122,7 +122,7 @@ export const ProductPage = ({ products }: ProductPageProps) => {
           <div className="max-w-7xl mx-auto px-10">
             <span className="text-[10px] uppercase tracking-[0.4em] opacity-40 block mb-4">You May Also Like</span>
             <h2 className="font-serif text-3xl italic font-light mb-12">Related Products</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{gap:'8px'}}>
               {relatedProducts.map(product => (
                 <Link 
                   key={product.id} 

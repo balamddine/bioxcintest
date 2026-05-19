@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import { ArrowUp, MapPin, Phone } from 'lucide-react';
 import { Navbar } from './components/Navbar';
 import { HomePage } from './pages/HomePage';
@@ -7,6 +7,14 @@ import { ShopPage } from './pages/ShopPage';
 import { ProductPage } from './pages/ProductPage';
 import { AboutPage } from './pages/AboutPage';
 import { products } from './data/products';
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [pathname]);
+  return null;
+}
 
 export default function App() {
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -22,6 +30,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col font-sans">
+      <ScrollToTop />
       <Navbar />
       
       <main className="flex-1">
