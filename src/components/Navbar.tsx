@@ -59,8 +59,7 @@ export const Navbar = () => {
 
         {/* Logo */}
         <Link to="/" className="flex items-center gap-4">
-        
-          <span className="font-serif text-3xl font-light tracking-tighter text-editor-text">BIOXCIN</span>
+          <img src="/logo.png" alt="NextWays SARL" className="h-10  object-contain" />
         </Link>
 
         {/* Desktop Nav */}

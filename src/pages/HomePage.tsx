@@ -129,7 +129,7 @@ export const HomePage = ({ products }: HomePageProps) => {
             <div className="max-w-2xl">
               <span className="text-[10px] uppercase tracking-[0.4em] opacity-50 text-white block mb-4">Who We Are</span>
               <h2 className="font-serif text-3xl lg:text-5xl italic font-light leading-tight mb-6 text-white">
-                Your Trusted Source for Authentic Bioxcin
+                Your Trusted Source for Authentic Bioxcin Products
               </h2>
               <p className="text-sm leading-relaxed opacity-70 text-white max-w-lg">
                 We are an authorized provider dedicated to bringing you genuine, clinically proven Bioxcin formulations with expert guidance and reliable service.
