@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Stop-Process -Name \"httpd\" -Force -ErrorAction SilentlyContinue)",
+      "PowerShell(Get-Content \"C:\\\\xampp\\\\apache\\\\conf\\\\extra\\\\httpd-xampp.conf\" | Select-String -Pattern \"DirectoryIndex|php|Handler\" | ForEach-Object { $_.Line })",
+      "PowerShell(Get-Content \"C:\\\\xampp\\\\apache\\\\conf\\\\extra\\\\httpd-xampp.conf\" | Select-String \"DirectoryIndex\" | ForEach-Object { $_.Line })",
+      "PowerShell(Get-Content \"C:\\\\xampp\\\\apache\\\\conf\\\\extra\\\\httpd-default.conf\" | Select-String \"DirectoryIndex\" | ForEach-Object { $_.Line })",
+      "PowerShell(& \"C:\\\\xampp\\\\mysql\\\\bin\\\\mysql.exe\" -u root -e \"USE bioxcin_wp; SHOW TABLES;\" 2>&1)",
+      "PowerShell(& \"C:\\\\xampp\\\\mysql\\\\bin\\\\mysql.exe\" -u root -e \"USE bioxcin_wp; SELECT option_value FROM bx_options WHERE option_name='active_plugins';\" 2>&1)",
+      "PowerShell(Copy-Item \"c:\\\\projects\\\\bioxcintest\\\\wordpress conversion\\\\setup\\\\import-woo-products.php\" \"C:\\\\xampp\\\\htdocs\\\\bioxcin\\\\import-woo-products.php\" -Force)",
+      "PowerShell(\\(Get-ChildItem \"C:\\\\xampp\\\\htdocs\\\\bioxcin\\\\wp-content\\\\uploads\\\\products\\\\\" -ErrorAction SilentlyContinue\\).Count)",
+      "PowerShell(& \"C:\\\\xampp\\\\mysql\\\\bin\\\\mysql.exe\" -u root -e \"USE bioxcin_wp; SELECT option_value FROM bx_options WHERE option_name='template' OR option_name='stylesheet';\" 2>&1)",
+      "PowerShell(Get-Content \"C:\\\\xampp\\\\apache\\\\conf\\\\extra\\\\httpd-autoindex.conf\" | Select-String \"DirectoryIndex\" | ForEach-Object { $_.Line })",
+      "PowerShell(Select-String -Path \"C:\\\\xampp\\\\apache\\\\conf\\\\httpd.conf\" -Pattern \"DirectoryIndex\" | ForEach-Object { \"$\\($_.LineNumber\\): $\\($_.Line\\)\" })",
+      "PowerShell(& \"C:\\\\xampp\\\\mysql\\\\bin\\\\mysql.exe\" -u root bioxcin_wp -e \"SELECT option_value FROM bx_options WHERE option_name='siteurl';\" 2>&1)",
+      "PowerShell(& \"C:\\\\xampp\\\\mysql\\\\bin\\\\mysql.exe\" -u root bioxcin_wp -e \"UPDATE bx_options SET option_value='hello-elementor' WHERE option_name='template'; UPDATE bx_options SET option_value='bioxcin' WHERE option_name='stylesheet';\" 2>&1)",
+      "PowerShell(Get-Content \"C:\\\\xampp\\\\apache\\\\logs\\\\error.log\" -Tail 20 | Where-Object { $_ -match \"PHP|Fatal|Warning|Error\" })",
+      "PowerShell(Copy-Item \"c:\\\\projects\\\\bioxcintest\\\\wordpress conversion\\\\bioxcin-theme\\\\header.php\" \"C:\\\\xampp\\\\htdocs\\\\bioxcin\\\\wp-content\\\\themes\\\\bioxcin\\\\header.php\" -Force)"
+    ]
+  }
+}

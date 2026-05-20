@@ -2,7 +2,33 @@
   "permissions": {
     "allow": [
       "Bash(Remove-Item -Recurse -Force \"c:\\\\projects\\\\bioxcintest\\\\node_modules\\\\.vite\" -ErrorAction SilentlyContinue)",
-      "Bash(Write-Output \"Cache cleared\")"
+      "Bash(Write-Output \"Cache cleared\")",
+      "Bash(Get-ChildItem -Path \"c:\\\\projects\\\\bioxcintest\" -Force)",
+      "Bash(Select-Object Name, Mode)",
+      "Read(//c/xampp/**)",
+      "Read(//c//**)",
+      "Bash(findstr \":80 \")",
+      "Bash(findstr \":3306\")",
+      "PowerShell(netstat -an)",
+      "PowerShell(& \"C:\\\\xampp\\\\mysql\\\\bin\\\\mysqladmin\" --user=root ping 2>&1)",
+      "PowerShell(Start-Process \"C:\\\\xampp\\\\mysql\\\\bin\\\\mysqld.exe\" --ArgumentList \"--console\" -WindowStyle Hidden)",
+      "PowerShell(Start-Process -FilePath \"C:\\\\xampp\\\\mysql\\\\bin\\\\mysqld.exe\" -ArgumentList \"--console\" -WindowStyle Hidden)",
+      "PowerShell(& \"C:\\\\xampp\\\\mysql_start.bat\" 2>&1)",
+      "PowerShell(netstat -ano)",
+      "PowerShell(& \"C:\\\\xampp\\\\mysql\\\\bin\\\\mysqladmin\" --user=root --host=127.0.0.1 ping 2>&1)",
+      "Bash(grep -v \"^$\")",
+      "PowerShell(& \"C:\\\\xampp\\\\mysql\\\\bin\\\\mysql.exe\" --user=root --host=127.0.0.1 -e \"CREATE DATABASE IF NOT EXISTS bioxcin_wp CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; SHOW DATABASES;\" 2>&1)",
+      "PowerShell(New-Item -ItemType Directory -Force -Path \"c:\\\\projects\\\\bioxcintest\\\\wordpress conversion\\\\bioxcin-theme\\\\assets\\\\css\")",
+      "PowerShell(New-Item -ItemType Directory -Force -Path \"c:\\\\projects\\\\bioxcintest\\\\wordpress conversion\\\\bioxcin-theme\\\\assets\\\\js\")",
+      "PowerShell(New-Item -ItemType Directory -Force -Path \"c:\\\\projects\\\\bioxcintest\\\\wordpress conversion\\\\bioxcin-theme\\\\template-parts\")",
+      "PowerShell(New-Item -ItemType Directory -Force -Path \"c:\\\\projects\\\\bioxcintest\\\\wordpress conversion\\\\setup\")",
+      "Bash(mkdir -p \"C:/xampp/htdocs/bioxcin\" && echo \"Created\")",
+      "Bash(python3 -c ' *)",
+      "Bash(node -e ' *)",
+      "PowerShell(New-Item -ItemType Directory -Force -Path \"c:\\\\projects\\\\bioxcintest\\\\wordpress conversion\\\\bioxcin-theme\\\\woocommerce\\\\single-product\")"
+    ],
+    "additionalDirectories": [
+      "C:\\xampp\\htdocs\\bioxcin"
     ]
   }
 }

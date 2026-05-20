@@ -65,8 +65,7 @@ export const Footer = () => {
             © 2026 Nextways Lebanon. All rights reserved.
           </p>
           <div className="flex items-center gap-3">
-            <span className="text-[10px] uppercase tracking-[0.1em] opacity-40">Distributed by</span>
-            <img src="/logo.png" alt="NextWays SARL" className="h-6 w-auto object-contain opacity-60" />
+            <span className="text-[10px] uppercase tracking-[0.1em] opacity-40">Distributed by NextWays</span>
           </div>
         </div>
       </div>
