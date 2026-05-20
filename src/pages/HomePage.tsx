@@ -44,18 +44,29 @@ export const HomePage = ({ products }: HomePageProps) => {
             { title: 'Service', value: 'Reliable Delivery', desc: 'Fast, secure shipping worldwide.' },
             { title: 'Support', value: 'Always Here', desc: 'Dedicated customer assistance.' }
           ].map((v, i) => (
-            <div key={i} className="flex flex-col border-l border-editor-border pl-6 first:border-none first:pl-0">
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: i * 0.1 }}
+              className="flex flex-col border-l border-editor-border pl-6 first:border-none first:pl-0"
+            >
               <span className="text-[9px] uppercase tracking-widest opacity-40 mb-3">{v.title}</span>
               <h4 className="font-serif italic text-lg mb-1">{v.value}</h4>
               <p className="text-[10px] text-neutral-500 uppercase tracking-wider leading-relaxed">{v.desc}</p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </section>
 
       {/* Featured Products */}
       <section className="max-w-7xl mx-auto px-10 py-32">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 mb-20">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="flex flex-col md:flex-row md:items-end justify-between gap-12 mb-20"
+        >
           <div>
             <span className="text-[10px] uppercase tracking-[0.4em] opacity-40 block mb-4">Curated Selection</span>
             <h2 className="font-serif text-5xl lg:text-7xl font-light leading-[0.9] -tracking-[0.03em]">Featured <br/><span className="italic">Products</span></h2>
@@ -66,14 +77,18 @@ export const HomePage = ({ products }: HomePageProps) => {
           >
             View All <ArrowRight size={14} />
           </Link>
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-          {featuredProducts.map(product => (
-            <ProductCard 
-              key={product.id} 
-              product={product} 
-            />
+          {featuredProducts.map((product, i) => (
+            <motion.div
+              key={product.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: i * 0.1 }}
+            >
+              <ProductCard product={product} />
+            </motion.div>
           ))}
         </div>
       </section>

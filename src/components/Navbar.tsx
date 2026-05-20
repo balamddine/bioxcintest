@@ -1,11 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, type FormEvent, type MouseEvent } from 'react';
 import { Search, Menu, X, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 const categories = ['Hair Care', 'Skin Care', 'Supplement'];
 
-export const Navbar = () => {
+export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -23,7 +23,7 @@ export const Navbar = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleSearch = (e: React.FormEvent) => {
+  const handleSearch = (e: FormEvent) => {
     e.preventDefault();
     if (searchTerm.trim()) {
       navigate(`/shop?search=${encodeURIComponent(searchTerm.trim())}`);
@@ -36,7 +36,32 @@ export const Navbar = () => {
     navigate(`/shop?category=${encodeURIComponent(cat)}`);
   };
 
-  const handleContactClick = (e: React.MouseEvent) => {
+  const isActive = (path: string) => {
+    if (path === '/shop') {
+      const hasCategory = new URLSearchParams(location.search).has('category');
+      return (location.pathname === '/shop' && !hasCategory) || location.pathname.startsWith('/product');
+    }
+    return location.pathname === path;
+  };
+
+  const navLinkClass = (path: string) =>
+    `text-[10px] tracking-widest uppercase transition-opacity ${
+      isActive(path)
+        ? 'opacity-100 underline underline-offset-4 decoration-editor-text/20'
+        : 'opacity-60 hover:opacity-100'
+    }`;
+
+  const isCategoryActive = (cat: string) => {
+    const params = new URLSearchParams(location.search);
+    return params.get('category') === cat;
+  };
+
+  const anyCategoryActive = categories.some(isCategoryActive);
+
+  const mobileLinkClass = (path: string) =>
+    `text-lg font-medium ${isActive(path) ? 'text-neutral-900' : 'text-neutral-500'}`;
+
+  const handleContactClick = (e: MouseEvent) => {
     e.preventDefault();
     if (location.pathname === '/') {
       document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
@@ -59,21 +84,25 @@ export const Navbar = () => {
 
         {/* Logo */}
         <Link to="/" className="flex items-center gap-4">
-          <img src="/logo.png" alt="NextWays SARL" className="h-10  object-contain" />
+          <img src="/bioxcin-logo.png" alt="BIOXCIN" className="h-10 object-contain" />
         </Link>
 
         {/* Desktop Nav */}
         <div className="hidden lg:flex items-center gap-12">
-          <Link to="/shop" className="text-[10px] tracking-widest uppercase hover:opacity-50 transition-opacity">Shop</Link>
-          
+          <Link to="/shop" className={navLinkClass('/shop')}>Shop</Link>
+
           <div className="relative" ref={dropdownRef}>
-            <button 
+            <button
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="text-[10px] tracking-widest uppercase hover:opacity-50 transition-opacity flex items-center gap-1"
+              className={`text-[10px] tracking-widest uppercase transition-opacity flex items-center gap-1 ${
+                anyCategoryActive
+                  ? 'opacity-100 underline underline-offset-4 decoration-editor-text/20'
+                  : 'opacity-60 hover:opacity-100'
+              }`}
             >
               Categories <ChevronDown size={12} className={`transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
             </button>
-            
+
             <AnimatePresence>
               {isDropdownOpen && (
                 <motion.div
@@ -87,7 +116,9 @@ export const Navbar = () => {
                     <button
                       key={cat}
                       onClick={() => handleCategoryClick(cat)}
-                      className="block w-full text-left px-6 py-3 text-[10px] tracking-widest uppercase hover:bg-editor-bg transition-colors"
+                      className={`block w-full text-left px-6 py-3 text-[10px] tracking-widest uppercase hover:bg-editor-bg transition-colors ${
+                        isCategoryActive(cat) ? 'opacity-100 font-medium' : 'opacity-60'
+                      }`}
                     >
                       {cat}
                     </button>
@@ -96,9 +127,10 @@ export const Navbar = () => {
               )}
             </AnimatePresence>
           </div>
-          
-          <Link to="/about" className="text-[10px] tracking-widest uppercase hover:opacity-50 transition-opacity">About Us</Link>
-          <button onClick={handleContactClick} className="text-[10px] tracking-widest uppercase hover:opacity-50 transition-opacity">Contact</button>
+
+          <Link to="/about" className={navLinkClass('/about')}>About Us</Link>
+          <Link to="/partnership" className={navLinkClass('/partnership')}>Partnership</Link>
+          <button onClick={handleContactClick} className="text-[10px] tracking-widest uppercase opacity-60 hover:opacity-100 transition-opacity">Contact</button>
         </div>
 
         {/* Actions */}
@@ -126,20 +158,21 @@ export const Navbar = () => {
             className="lg:hidden bg-white border-b border-neutral-200 overflow-hidden"
           >
             <div className="px-4 py-6 flex flex-col gap-4">
-              <Link to="/shop" onClick={() => setIsMenuOpen(false)} className="text-lg font-medium text-neutral-800">Shop</Link>
-              <div className="h-px bg-neutral-100" />
+              <Link to="/" onClick={() => setIsMenuOpen(false)} className={mobileLinkClass('/')}>Home</Link>
+              <Link to="/shop" onClick={() => setIsMenuOpen(false)} className={mobileLinkClass('/shop')}>Shop</Link>
               <span className="text-xs uppercase tracking-widest opacity-40">Categories</span>
               {categories.map(cat => (
                 <button
                   key={cat}
                   onClick={() => { handleCategoryClick(cat); setIsMenuOpen(false); }}
-                  className="text-lg font-medium text-neutral-800 text-left"
+                  className={`text-lg text-left ${isCategoryActive(cat) ? 'font-medium text-neutral-900' : 'text-neutral-500'}`}
                 >
                   {cat}
                 </button>
               ))}
               <div className="h-px bg-neutral-100 my-2" />
-              <Link to="/about" onClick={() => setIsMenuOpen(false)} className="text-lg font-medium text-neutral-800">About Us</Link>
+              <Link to="/about" onClick={() => setIsMenuOpen(false)} className={mobileLinkClass('/about')}>About Us</Link>
+              <Link to="/partnership" onClick={() => setIsMenuOpen(false)} className={mobileLinkClass('/partnership')}>Partnership</Link>
               <button onClick={handleContactClick} className="text-lg font-medium text-neutral-800 text-left">Contact</button>
               <div className="h-px bg-neutral-100 my-2" />
               <form onSubmit={handleSearch} className="flex items-center bg-neutral-100 rounded-lg px-4 py-3">

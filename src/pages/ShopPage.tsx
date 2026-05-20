@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useSearchParams } from 'react-router-dom';
 import { Filter, Search, X, ChevronLeft, ChevronRight, CheckSquare, Square } from 'lucide-react';
@@ -17,10 +17,12 @@ interface CategoryNode {
 export const ShopPage = ({ products }: ShopPageProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const urlSearch = searchParams.get('search') || '';
+  const urlCategory = searchParams.get('category') || '';
   const [searchTerm, setSearchTerm] = useState(urlSearch);
   const [checkedSubs, setCheckedSubs] = useState<Set<string>>(new Set());
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const lastAppliedCategory = useRef<string | null>(null);
 
   // Build category hierarchy from products
   const categoryTree = useMemo<CategoryNode[]>(() => {
@@ -38,6 +40,20 @@ export const ShopPage = ({ products }: ShopPageProps) => {
       subCategories: Array.from(subs).sort(),
     }));
   }, [products]);
+
+  // Sync category URL param to checked subcategories
+  useEffect(() => {
+    if (urlCategory === lastAppliedCategory.current) return;
+    if (!urlCategory || categoryTree.length === 0) return;
+
+    const cat = categoryTree.find(c => c.name === urlCategory);
+    if (cat) {
+      setCheckedSubs(new Set(cat.subCategories));
+      lastAppliedCategory.current = urlCategory;
+    } else {
+      lastAppliedCategory.current = null;
+    }
+  }, [urlCategory, categoryTree]);
 
   const filteredProducts = useMemo(() => {
     return products.filter(p => {
